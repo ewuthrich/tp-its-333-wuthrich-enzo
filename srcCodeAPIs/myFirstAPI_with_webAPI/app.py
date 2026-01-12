@@ -16,8 +16,8 @@ def utilisateurs():
     if not data or 'nom' not in data:
         return jsonify({"error": "Le champ 'nom' est requis"}), 400
         
-
-    return jsonify({"nom": data['nom']}), 201
+    nom =data['nom']
+    return jsonify(message=f"Utilisateur {nom} ajoute avec succes :)"), 201 #{"nom": data['nom']})
     
 
 
