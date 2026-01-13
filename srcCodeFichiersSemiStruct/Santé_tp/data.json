@@ -1,0 +1,20 @@
+{
+    "1" : {
+        "id" : "1",
+        "nom": "Bob",
+        "GS" : "O+",
+        "maladie" : "covid-19" 
+     },
+     "2" : {
+        "id" : "2",
+        "nom": "Greg",
+        "GS" : "AB-",
+        "maladie" : "diabete" 
+     },
+     "3" : {
+        "id" : "3",
+        "nom": "Jean-Charle",
+        "GS" : "B",
+        "maladie" : "cancer" 
+     }
+}
