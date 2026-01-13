@@ -1,35 +1,56 @@
-
-
-#conn = sqlite3.connect ( 'database.db' )
-
-#print ("Base de données ouverte avec succès")
-#conn.execute ( 'CREATE TABLE etudiants (nom TEXT, addr TEXT, pin TEXT)' )
-#print ("Table créée avec succès")
-#conn.close ()
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
-from flask import Flask, request, render_template
- 
+
 app = Flask(__name__)
 
-conn = sqlite3.connect ( 'database.db' )
-print ("Base de données ouverte avec succès")
-conn.execute ( 'CREATE TABLE IF NOT EXISTS etudiants (nom TEXT, addr TEXT, pin TEXT)' )
-print ("Table créée avec succès")
-conn.close ()
+# Création de la base
+def init_db():
+    conn = sqlite3.connect('database.db')
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS etudiants (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nom TEXT,
+            addr TEXT,
+            pin TEXT
+        )
+    """)
+    conn.close()
 
-@app.route("/new", methods=["POST"])
-def add_student():
+init_db()
+
+# Page formulaire
+@app.route('/')
+def index():
+    return render_template('form.html')
+
+# Ajout étudiant
+@app.route('/new', methods=['POST'])
+def add_etudiant():
     nom = request.form['nom']
-    addr = request.form['addr']
-    pin = request.form['pin']
+    adress = request.form['adress']
+    pincode = request.form['pincode']
 
-    with sqlite3.connect( "database.db") as con:
+    with sqlite3.connect("database.db") as con:
         cur = con.cursor()
         cur.execute(
-        "INSERT INTO etudiants (nom,addr,pin) VALUES (?,?,?)", ("{nom}","{adrr}","{pin}"))
+            "INSERT INTO etudiants (nom, addr, pin) VALUES (?, ?, ?)",
+            (nom, adress, pincode)
+        )
         con.commit()
 
-    return f"Etudiant {nom} ajouté" 
+    # 🔁 Redirection vers le tableau
+    return redirect(url_for('liste_etudiants'))
 
-if __name__ == "__main__":
+# Afficher les étudiants en TABLEAU HTML
+@app.route('/etudiants')
+def liste_etudiants():
+    conn = sqlite3.connect("database.db")
+    cur = conn.cursor()
+    cur.execute("SELECT nom, addr, pin FROM etudiants")
+    rows = cur.fetchall()
+    conn.close()
+
+    return render_template("base.html", etudiants=rows)
+
+if __name__ == '__main__':
     app.run(debug=True)
