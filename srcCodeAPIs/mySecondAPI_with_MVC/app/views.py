@@ -1,6 +1,8 @@
 from app import app
 from flask import render_template, request, jsonify
 
+'Laisser les autres exercice en commentaire lorsque vous en lancer un et noubliez pas de modifier index.html '
+
 ### EXO1 - simple API
 #@app.route("/")
 #def index():
@@ -8,12 +10,17 @@ from flask import render_template, request, jsonify
 
 ### EXO2 - API with simple display
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    user={'name':'Zozo', 'surname':'Wuwu'}
+#@app.route('/', methods=['GET', 'POST'])
+#def index():
+#    user={'name':'Zozo', 'surname':'Wuwu'}
 
-    return render_template('index.html', title='MDM', utilisateur=user)
+#    return render_template('index.html', title='MDM', utilisateur=user)
 
 ### EXO3 - API with parameters display 
 
 ### EXO4 - API with parameters retrieved from URL 
+@app.route('/surname=<surname>&name=<name>', methods=['GET', 'POST'])
+def index(name, surname):
+    user={'name': name , 'surname': surname}
+
+    return render_template('index.html', title='MDM', utilisateur=user)
