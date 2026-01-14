@@ -1,0 +1,26 @@
+services:
+  auth-service:
+    build:
+      context: ./auth
+      dockerfile: dockerfile.dockerfile
+    ports:
+      - "5000:5000"
+
+  personne_service:  
+    build:
+      context: ./personne_service
+      dockerfile: dockerfile.dockerfile
+    ports:
+      - "5001:5001"
+    depends_on:
+      - auth-service
+
+  health_service:
+    build:
+      context: ./health_service
+      dockerfile: dockerfile.dockerfile
+    ports:
+      - "5002:5002"
+    depends_on:
+      - personne_service   
+
